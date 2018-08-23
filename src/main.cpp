@@ -19,7 +19,7 @@
 #include "../includes/Eigen/Eigenvalues"
 #include "../includes/Eigen/Dense"
 
-#define DEFAULT_FILE "resources/testing.dat"
+#define DEFAULT_FILE "resources/rainfall.dat"
 #define RESULT  "result/results.dat"
 
 using namespace std;
