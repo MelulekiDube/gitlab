@@ -1,0 +1,20 @@
+*****************************Results*****************************
+
+The covariance matrix is:
+0.616555 0.715444
+0.715444 0.716556
+
+
+The eigenvalue for principle component 1 and 2 are:
+(-0.0506339,0)
+   (1.38375,0)
+
+
+The eigenvector corresponding to the first principal component is:
+(-0.73134,0)
+(0.682013,0)
+
+
+The eigenvector corresponding to the second principal component is:
+(-0.682013,0)
+ (-0.73134,0)

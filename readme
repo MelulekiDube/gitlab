@@ -1,0 +1,21 @@
+File structure:
+    src/ contains the source files
+    object/ contains the compiled object files
+    bin/ contains the linked executable files
+    includes/ contains the included header files and other files. (all contents of these directory are needed to successfully compile and run the application)
+    resources/ contains the input data used to test the algorithm
+    result/ contains the results of the assignment
+    
+   
+Running and compiling the code:
+    to compile use: 
+		make
+    to run the code use:
+		make run  (to run using a default file)
+		./bin/pca resources/rainfall.dat to run using the data presented for the assignment
+		./bin/pca <filename> in general to run with a specific file with data of 2-D data
+
+The file report.pdf has the answers for the assignment and the file in results directory is where these answers where taken from.
+
+This library used to calculate the eigenvalues and eigenvector is Eigen and the data for it is included in the includes directory.
+Thank you!!!!

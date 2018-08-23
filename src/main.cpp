@@ -16,11 +16,16 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <Eigen/Eigenvalues> 
-#include <Eigen/Dense>
+#include "../includes/Eigen/Eigenvalues"
+#include "../includes/Eigen/Dense"
+
+#define DEFAULT_FILE "resources/testing.dat"
+#define RESULT  "result/results.dat"
 
 using namespace std;
 using namespace Eigen;
+
+ofstream file(RESULT);
 using Eigen::MatrixXd;
 using Eigen::Matrix2f;
 
@@ -62,21 +67,13 @@ vector<float> subtract_mean(vector<float> data) {
 
 Matrix2f cov(vector<float> x, vector<float> y) {
     Matrix2f result;
-    /* the expection is a matrix as below:
-     *	cov(x x), cov(x y)
-     *	cov(y, x), cov(y, y)
-     */
-    float x_min = mean(x);
-    float y_min = mean(y);
-    float varx;
-    float vary;
-    float varxy;
+    float x_min = mean(x), y_min = mean(y);
+    float varx, vary, varxy;
     for (int i = 0; i < x.size(); ++i) {
 	varx += (x[i] - x_min)*(x[i] - x_min);
 	vary += (y[i] - y_min)*(y[i] - y_min);
 	varxy += (x[i] - x_min)*(y[i] - y_min);
     }
-
     varx /= x.size() - 1;
     vary /= y.size() - 1;
     varxy /= x.size() - 1;
@@ -88,28 +85,30 @@ Matrix2f cov(vector<float> x, vector<float> y) {
 }
 
 void calculate_eigenvectors(Matrix2f cov_matrice) {
-    EigenSolver<Matrix2f> ces(cov_matrice, false);
-    cout << "The first eigenvector of the 3x3 matrix of ones is:"
-	    << endl << ces.eigenvalues() << endl;
+    EigenSolver<Matrix2f> es;
+    es.compute(cov_matrice, false);
+    file << "\n\nThe eigenvalue for principle component 1 and 2 are:\n" << es.eigenvalues() << endl;
+    EigenSolver<Matrix2f> ces(cov_matrice);
+    file << "\n\nThe eigenvector corresponding to the first principal component is:\n" << ces.eigenvectors().col(0) << endl;
+    file << "\n\nThe eigenvector corresponding to the second principal component is:\n" << ces.eigenvectors().col(1) << endl;
+
+}
+
+void perform_algorithm(string input_filename) {
+    pair<vector<float>, vector<float>> d = get_data(input_filename);
+    vector<float > x = subtract_mean(d.first);
+    vector<float> y = subtract_mean(d.second);
+    Matrix2f m = cov(x, y);
+    file << "The covariance matrix is:\n" << m << endl;
+    calculate_eigenvectors(m);
 }
 
 /*
  * 
  */
 int main(int argc, char** argv) {
-    pair<vector<float>, vector<float>> d = get_data("resources/testing.dat");
-    vector<float > x = d.first;
-    vector<float> y = d.second;
-    x = subtract_mean(x);
-    y = subtract_mean(y);
-    x[3] = 0.09;
-    std::for_each(x.begin(), x.end(), print);
-    cout << endl;
-    std::for_each(y.begin(), y.end(), print);
-    cout << endl;
-    Matrix2f m = cov(x, y);
-    calculate_eigenvectors(m);
-    cout << m;
-    return 0;
+    file << "*****************************Results*****************************\n" << endl;
+    perform_algorithm(argc > 1 ? argv[1] : DEFAULT_FILE);
+    file.close();
 }
 

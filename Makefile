@@ -4,24 +4,26 @@
 #Meluleki Dube
 CPP =g++
 CPPFLAGS =-std=c++11
-TARGET=pca.out
+TARGET=pca
 SRCDIR =src
 BINDIR =bin
+OBJECT =objects
 SRC=$(SRCDIR)/main.cpp
-OBJECTS=$(BINDIR)/main.o 
+OBJECTS=$(OBJECT)/main.o 
 
 
 $(TARGET): $(OBJECTS)
 	$(CPP) $(OBJECTS)-o $@ $(CPPFLAGS)
+	@mv $(TARGET) $(BINDIR)
 
 $(OBJECTS): $(SRC)
 	$(CPP) $< -c $(SRC) $(CPPFLAGS)
-	@mv *.o $(BINDIR)
+	@mv *.o $(OBJECT)
 
 run:
-	./$(TARGET)
+	./$(BINDIR)/$(TARGET)
 
 clean:
-	@rm -f -r *.o bin/*.o *.exe *.out
+	@rm -f -r *.o $(OBJECT)/*.o *.exe *.out $(BINDIR)/*
 
 # end of Makefile
